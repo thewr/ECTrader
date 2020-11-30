@@ -1,0 +1,8 @@
+JvmtiExport can_access_local_variables 0
+JvmtiExport can_hotswap_or_post_breakpoint 0
+JvmtiExport can_post_on_exceptions 0
+# 111 ciObject found
+ciMethod java/util/regex/Pattern$Node match (Ljava/util/regex/Matcher;ILjava/lang/CharSequence;)Z 4097 1 2656 0 -1
+ciMethod java/util/regex/Pattern$GroupTail match (Ljava/util/regex/Matcher;ILjava/lang/CharSequence;)Z 4097 1 53850 0 1664
+ciMethod java/util/regex/Pattern$BranchConn match (Ljava/util/regex/Matcher;ILjava/lang/CharSequence;)Z 22201 1 9871 0 -1
+ciMethodData java/util/regex/Pattern$GroupTail match (Ljava/util/regex/Matcher;ILjava/lang/CharSequence;)Z 0 0 orig 264 88 131 247 94 0 0 0 0 32 193 158 27 0 0 0 0 208 1 0 0 32 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 209 130 6 0 1 0 0 0 67 97 0 0 0 0 0 0 2 0 0 0 0 0 7 0 2 0 0 0 112 0 0 0 255 255 255 255 7 0 13 0 0 0 0 0 data 14 0xd0007 0x6c 0x70 0xcfee 0x464005 0x35 0x1d5005c0 0xcfa3 0x7c0048e88 0x17 0x49e007 0xcfb7 0x20 0x3a oops 2 6 java/util/regex/Pattern$5
