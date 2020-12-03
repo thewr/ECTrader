@@ -101,7 +101,7 @@ public class Item implements Comparable<Item> {
        this.datapt.add(new Data(price,time));
                this.price = price;
 
-       isRecent = isRecent(time,10);
+       isRecent = isRecent(time,30);
     }
    
    public String getPrice(){
@@ -135,7 +135,7 @@ public class Item implements Comparable<Item> {
        
        int key = sname.hashCode();
        if(Seller.map.containsKey(key)){
-           isPast = t.isPast(time,Seller.map.get(key),8);
+           isPast = t.isPast(time,Seller.map.get(key),2);
        }       
 
        return ((isPast));//||(sellers.isPeek(sname, time) && prices.peek() != price));
