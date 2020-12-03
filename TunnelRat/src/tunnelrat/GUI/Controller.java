@@ -196,13 +196,13 @@ public class Controller {
             Item item = map.get(key);
                         
             int count = item.getCount();
-            if (count >= 3) {
+            if (count >= 10) {
                 
                 if (item.isRecent){
                     modelTop.addRow(item.toObjectTop());    
                 }
-                else
-                    modelBot.addRow(item.toObjectBot());
+                
+                modelBot.addRow(item.toObjectBot());
             }
          it.remove();   
         }
