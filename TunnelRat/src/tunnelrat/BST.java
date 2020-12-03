@@ -65,7 +65,7 @@ public class BST {
     {
         Statistics tmp = new Statistics();
         
-        int L = 7;
+        int L = 15;
         int  K = (int)Math.floor(L/2);
         Window win = new Window();
         win.clear();
@@ -160,24 +160,18 @@ public class BST {
             while(m.find()) {
                 // get match result object
                 MatchResult result = m.toMatchResult();
+                String price_string = result.group(2).replaceAll("p", "").trim();
+                int price = tr.processPrice(price_string);
+                if(price < 100) continue;
+                
                 String name = result.group(1);  
                 name = tr.processItem(name);
                 if(tr.skipItem(name)) continue;
 
-                String price_string = result.group(2).replaceAll("p", "").trim();
-                if(price_string.isEmpty()) continue;
-     
-                int price = tr.processPrice(price_string);
-                
-                name = tr.replaceItem(name.trim());
+               // name = tr.replaceItem(name.trim());
 
-                if(price >= 10){
-                    //message.isValidInstance = 
-                    insert(name, price, seller, timestamp);
-                    
-                    
-                }
-                
+                insert(name, price, seller, timestamp);
+
             }
             
         }
