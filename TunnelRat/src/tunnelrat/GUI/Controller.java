@@ -145,8 +145,6 @@ public class Controller {
     
     public void setupTables(JTable top, JTable bot){
         
-        PriceChangeColorRenderer colorRenderer = new PriceChangeColorRenderer();
-
         
         top.setModel(modelTop);
         bot.setModel(modelBot);
@@ -172,22 +170,33 @@ public class Controller {
         //top.setFillsViewportHeight(true);
         //top.setPreferredScrollableViewportSize(new Dimension(200, 150));
         //top.setDefaultRenderer(String.class, centerRenderer);
-        top.setDefaultRenderer(Object.class, centerRenderer);
         
-        //for(int i = 1; i < Constants.colNamesTop.length; i++)
-         //   top.getColumnModel().getColumn(i).setPreferredWidth(50);
         
+        
+        
+       // top.setDefaultRenderer(Object.class, centerRenderer);
+        top.getColumnModel().getColumn(0).setPreferredWidth(200);
+
+        //for(int i = 1; i < Constants.colNamesTop.length; i++){
+        //    TableColumn tableColumn = top.getColumnModel().getColumn(i);
+        //    tableColumn.setPreferredWidth(50);
+        //    if(i>1){
+        //        tableColumn.setCellRenderer(centerRenderer);
+        //        //top.getColumnModel().getCol
+        //    }
+        //}
+        PriceChangeColorRenderer colorRenderer = new PriceChangeColorRenderer();
+        top.setDefaultRenderer(Object.class, colorRenderer);
         ////// bottom
                 
         //bot.setMaximumSize(new Dimension(100,150));
        //bot.setDefaultRenderer(String.class, centerRenderer);
        bot.setDefaultRenderer(Object.class, centerRenderer);
-        
        bot.getColumnModel().getColumn(0).setPreferredWidth(200);
        for(int i = 1; i < Constants.colNamesBot.length; i++)
             bot.getColumnModel().getColumn(i).setPreferredWidth(i*25);
        
-       top.setDefaultRenderer(Object.class, colorRenderer);
+
        
        Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
@@ -217,11 +226,11 @@ class PriceChangeColorRenderer extends  DefaultTableCellRenderer  {
            boolean isSelected,   boolean hasFocus, int row, int column) 
    {
 
-       Component c = super.getTableCellRendererComponent(table, value,
+       Component tableCellRendererComponent = super.getTableCellRendererComponent(table, value,
                isSelected, hasFocus, row, column);
        
-       
-       
+       int align = DefaultTableCellRenderer.CENTER;
+       ((DefaultTableCellRenderer)tableCellRendererComponent).setHorizontalAlignment(align);
         // Apply zebra style on table rows
        /*
         if (row % 2 == 0) {
@@ -232,106 +241,54 @@ class PriceChangeColorRenderer extends  DefaultTableCellRenderer  {
         */
                 
         
-        if (column == Constants.SALE_IDX) {
-            Object priceObj = table.getModel().getValueAt(row,Constants.PRICE_IDX);
-            Object saleObj = table.getModel().getValueAt(row,Constants.SALE_IDX);
-            Object stdObj = table.getModel().getValueAt(row, Constants.PERCENTAGE_CHANGE_IDX);
+        if (column == Constants.AUC_PRICE) {
+            Object aucObj = table.getModel().getValueAt(row,Constants.AUC_PRICE);
+            Object emaObj = table.getModel().getValueAt(row,Constants.EMA_PRICE);
+            //Object stdObj = table.getModel().getValueAt(row, Constants.PERCENTAGE_CHANGE_IDX);
             
-            double price = Double.parseDouble(priceObj.toString());
-            double sale = Double.parseDouble(saleObj.toString());
-            double std = Double.parseDouble(stdObj.toString());
+            int auc_price = Integer.parseInt(aucObj.toString());
+            int ema_price = Integer.parseInt(emaObj.toString());
             
-            double z = (price-sale)/(double)std;
-            Color color;
-            //if (z != 0) {
-                if(z > 1){
-                    color = Constants.PRICE_UP_COLOR;
-                //else
-                //    color = Constants.PRICE_DOWN_COLOR;
-                c.setForeground(color);
-                }
-            //}           
+            Color color = null;
+            int diff = ema_price - auc_price;
+            if(diff >= 500){
+                color = Constants.colors_good[0];
+            }
+            else if ((diff < 500)&&(diff >= 250)){
+                color = Constants.colors_good[1];
+            }
+            else if ((diff < 250)&&(diff>100))
+            {
+                color = Constants.colors_good[2];
+            }
+            
+            if (diff <= -500)
+                color = Constants.colors_bad[0];
+            else if ((diff >-500)&&(diff <= -250))
+                color = Constants.colors_bad[1];
+            else if ((diff >-250)&&(diff <= -100))
+                color = Constants.colors_bad[2];
+            
+            tableCellRendererComponent.setForeground(color);
         } else {
-            c.setForeground(Constants.DEFAULT_FOREGROUND_COLOR);
+            tableCellRendererComponent.setForeground(Constants.DEFAULT_FOREGROUND_COLOR);
         }
         
-      return c;
+      return tableCellRendererComponent;
    }
 }
+
+class MyRenderer{
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer(){
+        @Override
+        public Component getTableCellRendererComponent(JTable table,Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+             Component tableCellRendererComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+             int align = DefaultTableCellRenderer.CENTER;
+            ((DefaultTableCellRenderer)tableCellRendererComponent).setHorizontalAlignment(align);
+             return tableCellRendererComponent;
+        }
+    };
+}
     
     
 }
-    
-
-    
-    
-    
-    
-
-
-//NOTES
-
-
-//I think you are making a mistake of conceptually tying a "view" to individual GUI components. In the MVC model there really is not such concept as a "subview".
-//
-//If you have a frame, for example, with many panels and subpanels and subcomponents such as buttons, etc., that entire thing is the view/controller interface in MVC. Your top-level frame (or some encapsulating class, perhaps your GUI has many frames, it doesn't matter) would provide the interface to the controller (via, say, events) and the view (via, say, listeners). Exactly how your UI is arranged is abstracted behind that. Think of your entire UI as a black box. How events are dispatched / provided from the internal components is part of the UI implementation, and this may very well involve event chains and delegates and etc. -- but that is not something the view/controller is concerned with.
-//
-//So you end up with something like (conceptual example):
-//
-//Model m = new Model();
-//View v = new View(m);
-//Controller c = new Controller(m);
-//MyFrame gui = new MyFrame(v, c);
-//
-//Then:
-//
-//public MyFrame (View v, Controller c) {
-//
-//   // register listeners to view, e.g.
-//   v.addChangeListener(this /* or some other ui component */);
-//
-//   // send events to controller, e.g.
-//   addActionListener(c /* or some interface that c provides */).
-//
-//   // or even:
-//   deleteButton.addActionListener(new ActionListener(){
-//       @Override public void actionPerformed (ActionEvent e) {
-//           c.doDelete();
-//       }
-//   });   
-//
-//}
-//
-//In an ideal situation, you can completely rework the hierarchy of your GUI, having a totally different component tree and organization, and, providing the information being conveyed through the GUI remains unchanged, the view and controller remain unchanged as well.
-//
-//Once you get used to the MVC pattern, you may start to take shortcuts here and there (for example, in many cases the view and/or controller are just middle-men for events, and the GUI itself sometimes ends up encapsulating the entire controller and view concepts, leaving you with a GUI, a model, and a bunch of event listeners -- the Swing event architecture is fairly MVC in itself), and boundaries may get fuzzier. That's OK. But there's no reason that either the view or the controller have to know about the structure and object tree in the GUI -- even in cases where controller/view are just abstract concepts instead of concrete classes.
-//
-//Sometimes MVC can get especially fuzzy when working with Swing because you kind of end up doing everything in an MVC way naturally, so when you try to explicitly impose an MVC pattern on your architecture, you're left wondering why that doesn't seem to change much at all (and it becomes difficult to see the benefits, because you forget that you're already doing it). Sometimes it's more of a way of thinking than a concrete way of doing.
-//
-//Essentially, any time your model is completely independent of your GUI, you are using some incarnation of MVC.
-//
-//Edit: I noticed you also tagged this with "observer pattern" and mentioned it briefly. It's worth noting that many times, explicitly implementing an observer pattern for Swing-based GUIs, at least in relatively simple applications, adds nothing but a redundant abstraction layer, as the entire Swing API is already fundamentally based on this design pattern (it's the whole event -> listener subsystem).
-//
-//Frequently I have found that something like the following works well, using the so-called observer pattern all around, where the controller was essentially just a collection of event listeners, like:
-//
-// public class Controller {
-//     Model m;
-//     public ActionListener getDeleteListener () {
-//         return new ActionListener() {
-//             @Override public void actionPerformed (ActionEvent e) {
-//                 m.deleteSomething();
-//             }
-//         };
-//     }
-// }
-//
-//And then the GUI does something like:
-//
-// public class GUI extends JFrame {
-//     JButton deleteButton; 
-//     public GUI (View v, Controller c) {
-//         deleteButton.addActionListener(c.getDeleteListener()); 
-//     }
-// }
-//
-//But, there are many ways to skin that cat. In that example, even, once you are familiar with the concept, and if it is appropriate, you could take a shortcut and just have the GUI constructor register listeners that modify the model. Then, as mentioned above, the controller becomes just an abstract concept.
