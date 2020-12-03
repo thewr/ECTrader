@@ -32,7 +32,7 @@ public class Constants {
             { "RAD", "Rite Aid Corporation", 7.87, -0.18, "-2.24%", 13606253 } };
     */
     
-    public static final String[] colNamesTop = {"ITEM", "SELLER", "PRICE", "EMA", "STDEV"};
+    public static final String[] colNamesTop = {"ITEM", "SELLER", "PRICE", "EMA"};
     
     public static final String[] colNamesBot = {"ITEM", "COUNT", "EMA"};
 
@@ -40,10 +40,10 @@ public class Constants {
     
     public static final int DATA_REFRESH_RATE = 3000;
  
-    public static final Color PRICE_UP_COLOR = Color.GREEN;
- 
-    public static final Color PRICE_DOWN_COLOR = Color.RED;
- 
+    public static final Color colors_good[] = {Color.decode("#28cf35"),Color.decode("#16AF21"),Color.decode("#099213")};
+    
+    public static final Color colors_bad[] = {Color.decode("#E04214"),Color.decode("#A93715"),Color.decode("#701E06")};
+    
     public static final Color DEFAULT_FOREGROUND_COLOR = Color.BLACK;
  
     public static final Color ODD_ROW_COLOR = Color.decode("#e2e2fa");
@@ -60,9 +60,9 @@ public class Constants {
  
     public static final double[] PRICE_CHANGE_RANGE = { 0.1, 0.5 };
  
-    public static final int SALE_IDX = 2;
+    public static final int AUC_PRICE = 2;
  
-    public static final int PRICE_IDX = 3;
+    public static final int EMA_PRICE = 3;
  
     public static final int PERCENTAGE_CHANGE_IDX = 4;
     
